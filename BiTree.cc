@@ -301,20 +301,6 @@ class Solution {
             connect(root->left);
             connect(root->right);
         }
-        /*
-           Given a binary tree, find the maximum path sum.
-           The path may start and end at any node in the tree.
-           For example:
-           Given the below binary tree,
-           1
-           / \
-           2   3
-           Return 6. 
-         */
-        int maxPathSum(TreeNode *root) {
-
-        }
-
         TreeNode *createArrayToBST(vector<int> &num, int l, int u)
         {
             if(l > u) return NULL;
@@ -322,10 +308,10 @@ class Solution {
             int m = (l + u)/2;
 
             TreeNode *root = new TreeNode(num[m]);
-            
+
             root->left = createArrayToBST(num, l, m - 1);
             root->right= createArrayToBST(num, m + 1, u);
-            
+
             return root;
         }
 
@@ -336,7 +322,7 @@ class Solution {
 
             return createArrayToBST(num, 0, n - 1);
         }
-        
+
         bool _isValidBST(TreeNode *root, int pre)
         {
             bool ret = true;
@@ -349,6 +335,7 @@ class Solution {
 
             return ret;
         }
+
         bool isValidBST(TreeNode *root) {
             if (root == NULL) return true;
 
@@ -360,11 +347,63 @@ class Solution {
 
             return true;
         }
+
+        int maxDepth(TreeNode *root) {
+            int ld, rd;
+            if (!root) return 0;
+            ld = maxDepth(root->left);
+            rd = maxDepth(root->right);
+            return 1 + (ld > rd ? ld:rd);
+        }
+        int balanced;
+        int check1(TreeNode * T) {
+            int ld, rd;
+            if (!T) return 0;
+            ld = check1(T->left);
+            rd = check1(T->right);
+            if (ld - rd > 1 || rd - ld >1 ) balanced = false;
+            return 1 + (ld > rd ? ld:rd);
+
+        }
+        bool isBalanced(TreeNode *root) {
+            balanced = true;
+            check1(root);
+            return balanced;
+        }
+
+        int minDepth(TreeNode *root) {
+            int ld, rd;
+            if (!root) return 0;
+            if (root->right && !root->left) return minDepth(root->right) +1;
+            if (!root->right && root->left) return minDepth(root->left) +1;
+            ld = minDepth(root->left);
+            rd = minDepth(root->right);
+            return 1 + (ld < rd ? ld:rd);
+        }
+
+        /*
+           Given a binary tree, find the maximum path sum.
+           The path may start and end at any node in the tree.
+           For example:
+           Given the below binary tree,
+           1
+           / \
+           2   3
+           Return 6. 
+         */
+        /*Pending*/
+        int maxPathSum(TreeNode *root)
+        {
+            if (root == NULL) return 0;
+            int l = maxPathSum(root->left);
+            int r = maxPathSum(root->right);
+            return root->val + (l > r ? l : r);
+        }
 };
 
 int main() {
     /* Constructed binary tree is
-        10
+       10
        /   \
        8    2
        / \  /
