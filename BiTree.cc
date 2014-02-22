@@ -1,0 +1,488 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <algorithm>
+
+using namespace std;
+
+//Definition for binary tree with next pointer.
+struct TreeLinkNode {
+    int val;
+    TreeLinkNode *left, *right, *next;
+    TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
+};
+
+
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x): val(x), left(NULL), right(NULL) {}
+};
+
+class Solution {
+    public:
+        TreeNode *CreateTree(vector<int> &preorder, int pl, int pu, vector<int> &inorder, int il, int iu)
+        {
+            int len = preorder.size();
+
+            if (preorder.size() != inorder.size()) return NULL;
+            if (preorder.size() == 0) return NULL;
+
+            TreeNode *r = new TreeNode(preorder.at(pl));
+
+            // Search the pos of preorder[0]
+            vector<int>::iterator elem;
+            int pos = il;
+            for (vector<int>::iterator it = inorder.begin() + pl; it != inorder.begin() + pu; it++){
+                if (*it == preorder.at(0)) {
+                    break;
+                }
+                pos++;
+            }
+
+            int l_len = pos - il;
+            int r_len = iu - pos;
+
+            if (pos != il)
+                r->left = CreateTree(preorder, pl+1, pl + l_len, inorder, il, il + l_len - 1);
+            if (pos != iu)
+                r->right = CreateTree(preorder, pu - r_len + 1 , pu, inorder, pos +1 , iu);
+
+            return r;
+
+        }
+
+        TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder) {
+            return CreateTree(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1);
+        }
+
+        TreeNode *buildTree1(vector<int> &preorder, vector<int> &inorder) {
+            TreeNode * root;
+            TreeNode *  p;
+            int flag = 0;
+            int i, j;
+            i = j = 0;
+            stack<TreeNode *> S;
+
+            if (preorder.size() == 0) return NULL;
+
+            root = new TreeNode(preorder[0]);
+            S.push(root);
+            p = root;
+            i++;
+            while (i < preorder.size()){
+                if (!S.empty() && S.top()->val == inorder[j]) {
+                    flag = 1;
+                    p = S.top();
+                    S.pop();
+                    j++;
+                } else {
+                    if (flag == 0){
+                        p->left = new TreeNode(preorder[i]);
+                        i++;
+                        S.push(p->left);
+                        p = p->left;
+                    } else {
+                        p->right = new TreeNode(preorder[i]);
+                        i++;
+                        S.push(p->right);
+                        p = p->right;
+                        flag = 0;
+                    }
+                }
+            }
+
+            return root;
+        }
+
+        TreeNode *buildTree2(vector<int> &inorder, vector<int> &postorder) {
+            TreeNode * root;
+            TreeNode *  p;
+            int flag = 0;
+            int i, j;
+            stack<TreeNode *> S;
+            int len = postorder.size();
+            if (len == 0) return NULL;
+
+            i = j = len -1;
+            root = new TreeNode(postorder[i]);
+            S.push(root);
+            p = root;
+            i--;
+            while (i >= 0){
+                if (!S.empty() && S.top()->val == inorder[j]) {
+                    flag = 1;
+                    p = S.top();
+                    S.pop();
+                    j--;
+                } else {
+                    if (flag == 0){
+                        p->right= new TreeNode(postorder[i]);
+                        i--;
+                        S.push(p->right);
+                        p = p->right;
+                    } else {
+                        p->left = new TreeNode(postorder[i]);
+                        i--;
+                        S.push(p->left);
+                        p = p->left;
+                        flag = 0;
+                    }
+                }
+            }
+            return root;
+        }
+
+        vector<int> preorderTraversal(TreeNode *root) {
+            vector<int> res;
+            stack<TreeNode *> S;
+
+            S.push(root);
+            res.push_back(root->val);
+
+            while (!S.empty()){
+                while (S.top()->left) {
+                    TreeNode *t = S.top()->left;
+                    res.push_back(t->val);
+                    S.push(t);
+                }
+
+                TreeNode* top = S.top();S.pop();
+                while (top && !top->right && !S.empty()) {
+                    top = S.top();
+                    S.pop();
+                }
+
+                if (top && top->right) {
+                    TreeNode *t = top->right;
+                    res.push_back(t->val);
+                    S.push(t);
+                }
+            }
+
+            return res;
+        }
+
+
+        vector<int> inorderTraversal(TreeNode *root) {
+            vector<int> res;
+            stack<TreeNode *> S;
+
+            if (root == NULL)
+                return res;
+
+            S.push(root);
+
+            while (!S.empty()){
+                while (S.top()->left) {
+                    S.push(S.top()->left);
+                }
+
+                TreeNode* top = S.top();S.pop();
+                res.push_back(top->val);
+                while (top && !top->right && !S.empty()) {
+                    top = S.top();
+                    res.push_back(top->val);
+                    S.pop();
+                }
+
+                if (top && top->right) {
+                    TreeNode *t = top->right;
+                    S.push(t);
+                }
+            }
+
+            return res;
+        }
+
+        vector<int> postorderTraversal(TreeNode *root) {
+            vector<int> res;
+            stack<TreeNode *> S;
+
+            S.push(root);
+            res.insert(res.begin(), root->val);
+
+            while (!S.empty()){
+                while (S.top()->right) {
+                    TreeNode *t = S.top()->right;
+                    res.insert(res.begin(), t->val);
+                    S.push(t);
+                }
+
+                TreeNode* top = S.top();S.pop();
+                while (top && !top->left&& !S.empty()) {
+                    top = S.top();
+                    S.pop();
+                }
+
+                if (top && top->left) {
+                    TreeNode *t = top->left;
+                    res.insert(res.begin(), t->val);
+                    S.push(t);
+                }
+            }
+
+            return res;
+        }
+
+        bool isSymmetric(TreeNode *root) {
+            vector<int> res = inorderTraversal(root);
+            int len = res.size();
+            for (int i = 0;i < len/2; i++)
+                if (res[i] != res[len - 1 - i]) return false;
+            return true;
+        }
+
+        bool hasPathSum(TreeNode *root, int sum) {
+            bool res_left = false, res_right = false;
+
+            if (root == NULL) return false;
+
+            if (root && sum == root->val && !root->left && !root->right) return true;
+
+            if (root->left) res_left = hasPathSum(root->left, sum - root->val);
+            if (root->right) res_right =  hasPathSum(root->right, sum - root->val);
+
+            return res_left || res_right;
+        }
+
+
+        bool getPathSum(TreeNode *root, int sum, vector <TreeNode *> &S, vector<vector<int> > &res)
+        {
+            bool res_left = false, res_right = false;
+            if (root == NULL) return false;
+            if (root && sum == root->val && !root->left && !root->right){
+
+                vector<int> t;
+                for (vector<TreeNode *>::iterator it = S.begin(); it != S.end(); it++){
+                    t.push_back((*it)->val);
+                }
+                t.push_back (root->val);
+                res.push_back(t);
+                return true;
+            }
+            if (root->left) {
+                S.push_back(root);
+                res_left = getPathSum(root->left, sum - root->val, S, res);
+                S.pop_back();
+            }
+            if (root->right) {
+                S.push_back(root);
+                res_right =  getPathSum(root->right, sum - root->val, S, res);
+                S.pop_back();
+            }
+            return res_left || res_right;
+
+
+        }
+        vector<vector<int> > pathSum(TreeNode *root, int sum) {
+            vector<vector<int> > res;
+            vector<TreeNode *> S;
+            getPathSum(root, sum, S, res);
+            return res;
+        }
+
+        bool isSameTree(TreeNode *p, TreeNode *q) {
+            if (p == NULL && q == NULL) return true;
+            if (p && q && p->val != q->val) return false;
+            if ((p != NULL && q == NULL) || (q != NULL && p == NULL)) return false;
+
+            return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+        }
+        void connect(TreeLinkNode *root) {
+            if (root == NULL) return; 
+            if (root->left && root->right)
+                root->left->next = root->right;
+            if (root->next && root->right)
+                root->right->next = root->next->left;
+
+            connect(root->left);
+            connect(root->right);
+        }
+        /*
+           Given a binary tree, find the maximum path sum.
+           The path may start and end at any node in the tree.
+           For example:
+           Given the below binary tree,
+           1
+           / \
+           2   3
+           Return 6. 
+         */
+        int maxPathSum(TreeNode *root) {
+
+        }
+
+        TreeNode *createArrayToBST(vector<int> &num, int l, int u)
+        {
+            if(l > u) return NULL;
+
+            int m = (l + u)/2;
+
+            TreeNode *root = new TreeNode(num[m]);
+            
+            root->left = createArrayToBST(num, l, m - 1);
+            root->right= createArrayToBST(num, m + 1, u);
+            
+            return root;
+        }
+
+        TreeNode *sortedArrayToBST(vector<int> &num) {
+            int n = num.size();
+            int i = n/2;
+            if (n == 0) return NULL;
+
+            return createArrayToBST(num, 0, n - 1);
+        }
+        
+        bool _isValidBST(TreeNode *root, int pre)
+        {
+            bool ret = true;
+            if (root->left)
+                ret = _isValidBST(root->left, root->val);
+            if (root->val <= pre )
+                return false;
+            if (root->right)
+                ret = (ret || _isValidBST(root->right, root->val));
+
+            return ret;
+        }
+        bool isValidBST(TreeNode *root) {
+            if (root == NULL) return true;
+
+            vector<int> res = inorderTraversal(root);
+            if (res.size() == 1) return true;
+            for (int i = 0; i < res.size() - 1; i++)
+                if (res[i] >= res[i+1])
+                    return false;
+
+            return true;
+        }
+};
+
+int main() {
+    /* Constructed binary tree is
+        10
+       /   \
+       8    2
+       / \  /
+       3  5 4
+       ref from: http://www.geeksforgeeks.org/iterative-preorder-traversal/
+
+     */
+    vector<int> pre, in, post;
+
+    /*   
+         int p[] = 
+         int i[] = 
+         for (int j = 0; j < 3000; j++){
+         pre.push_back(p[j]);
+         in.push_back(i[j]);
+         }
+     */
+    pre.push_back(10);
+    pre.push_back(8);
+    pre.push_back(3);
+    pre.push_back(5);
+    pre.push_back(2);
+    pre.push_back(4);
+
+    in.push_back(3);
+    in.push_back(8);
+    in.push_back(5);
+    in.push_back(10);
+    in.push_back(4);
+    in.push_back(2);
+
+    post.push_back(3);
+    post.push_back(5);
+    post.push_back(8);
+    post.push_back(4);
+    post.push_back(2);
+    post.push_back(10);
+
+    /*
+       pre.push_back(1);
+       pre.push_back(2);
+       pre.push_back(3);
+       in.push_back(1);
+       in.push_back(3);
+       in.push_back(2);
+     */
+
+    Solution S;
+    TreeNode * root = new TreeNode(10);
+    root->left = new TreeNode(8);
+    root->right = new TreeNode(2);
+    root->left->left = new TreeNode(3);
+    root->left->right = new TreeNode(5);
+    root->right->left = new TreeNode(4);
+
+    root = S.buildTree2(in, post);
+    vector<int> res = S.preorderTraversal(root);
+    cout << "pre order :";
+    for (int i = 0; i < res.size(); i++)
+        cout << res[i] << " ";
+    cout <<endl;
+
+    res = S.inorderTraversal(root);
+    cout << "in order : ";
+    for (int i = 0; i < res.size(); i++)
+        cout << res[i] << " ";
+    cout << endl;
+
+
+    res = S.postorderTraversal(root);
+    cout << "post order :";
+    for (int i = 0; i < res.size(); i++)
+        cout << res[i] << " ";
+    cout << endl;
+
+
+    if (S.hasPathSum(root, 21)) 
+        cout <<"has this path" <<endl;
+    vector<vector<int> > r = S.pathSum(root, 21);
+
+    for (int i = 0; i < r.size(); i++) {
+        for (int j = 0; j < r[0].size(); j++) {
+            cout << r[i][j] << " ";
+        }
+    }
+    cout << endl;
+
+    if (S.isSymmetric(root))
+        cout <<"Symmetric tree" <<endl; 
+    else
+        cout <<"Not Symmetric tree" <<endl;
+
+
+    /*--------------------------------------------------------*/
+    vector<int> num;
+    num.push_back(1);
+    num.push_back(2);
+    num.push_back(3);
+    num.push_back(4);
+    num.push_back(5);
+    root = S.sortedArrayToBST(num);
+
+    res = S.preorderTraversal(root);
+    cout << "pre order :";
+    for (int i = 0; i < res.size(); i++)
+        cout << res[i] << " ";
+    cout <<endl;
+
+    res = S.inorderTraversal(root);
+    cout << "in order : ";
+    for (int i = 0; i < res.size(); i++)
+        cout << res[i] << " ";
+    cout << endl;
+
+    if (S.isValidBST(root))
+        cout <<"IS BST"<<endl;
+    else 
+        cout <<"Not BST Tree" <<endl;
+
+    return 0;
+}
