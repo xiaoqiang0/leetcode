@@ -162,10 +162,8 @@ class Solution {
         int maxProfit2(vector<int> &prices) {
             int max = 0;
             int n = prices.size();
-            int *p;
-            int *q;
-            int *max_left;
-            int *max_right;
+            vector<int> max_left(n+1, 0);
+            vector<int> max_right(n+1, 0);
 
             if (n == 1 || n == 0)
                 return 0;
@@ -175,23 +173,6 @@ class Solution {
                     return prices[1] - prices[0];
                 else 
                     return 0;
-
-            p = (int *) malloc ( sizeof (int) * (n+2));
-            q = (int *) malloc ( sizeof (int) * (n+2));
-            max_left = p;
-            max_right = q;
-
-            max_left[0] = 0;
-            max_right[0] = 0;
-            max_left++;
-            max_right++;
-            max_left[n] = 0;
-            max_right[n] = 0;
-            
-            for (int i = 0; i <= n; i++) {
-                max_left[i] = 0;
-                max_right[i] = 0;
-            }
 
             int mi = 0;
 
@@ -222,13 +203,10 @@ class Solution {
 
             max = 0;
 
-            for (int i = -1; i < n; i ++){
+            for (int i = 0; i < n; i ++){
                 if (max_left[i] + max_right[i+1] > max)
                     max = max_left[i] + max_right[i+1];
             }
-
-            free(p);
-            free(q);
 
             return max;   
         }
