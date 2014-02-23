@@ -227,11 +227,61 @@ class Solution {
             return res;
         }
 
+        void preorder_left(TreeNode *root, vector<int> &res) {
+            if (root == NULL) 
+                return;
+            res.push_back(root->val);
+            inorder_left(root->left, res);
+            inorder_left(root->right, res);
+        }
+        void preorder_right(TreeNode *root, vector<int> &res) {
+            if (root == NULL) 
+                return;
+            res.push_back(root->val);
+            inorder_right(root->right, res);
+            inorder_right(root->left, res);
+        }
+        void inorder_left(TreeNode *root, vector<int> &res) {
+            if (root == NULL)
+                return;
+            inorder_left(root->left, res);
+            res.push_back(root->val);
+            inorder_left(root->right, res);
+        }
+        void inorder_right(TreeNode *root, vector<int> &res) {
+            if (root == NULL)
+                return;
+            inorder_right(root->right, res);
+            res.push_back(root->val);
+            inorder_right(root->left, res);
+        }
+        void postorder_left(TreeNode *root, vector<int> &res) {
+            if (root == NULL)
+                return;
+            postorder_left(root->left, res);
+            postorder_left(root->right, res);
+            res.push_back(root->val);
+        }
+        void postorder_right(TreeNode *root, vector<int> &res) {
+            if (root == NULL)
+                return;
+            postorder_right(root->right, res);
+            postorder_right(root->left, res);
+            res.push_back(root->val);
+        }
         bool isSymmetric(TreeNode *root) {
-            vector<int> res = inorderTraversal(root);
-            int len = res.size();
-            for (int i = 0;i < len/2; i++)
-                if (res[i] != res[len - 1 - i]) return false;
+            vector<int> res1, res2;
+
+            preorder_left(root, res1);
+            inorder_left(root, res1);
+            postorder_left(root, res1);
+
+            preorder_right(root, res2);
+            inorder_right(root, res2);
+            postorder_right(root, res2);
+
+            for (int i = 0;i < res1.size();  i++)
+                if (res1[i] != res2[i]) return false;
             return true;
         }
 
@@ -452,14 +502,14 @@ int main() {
      */
 
     Solution S;
-    TreeNode * root = new TreeNode(10);
-    root->left = new TreeNode(8);
-    root->right = new TreeNode(2);
+    TreeNode * root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
     root->left->left = new TreeNode(3);
-    root->left->right = new TreeNode(5);
-    root->right->left = new TreeNode(4);
+   // root->left->right = new TreeNode(5);
+    root->right->left = new TreeNode(2);
 
-    root = S.buildTree2(in, post);
+//    root = S.buildTree2(in, post);
     vector<int> res = S.preorderTraversal(root);
     cout << "pre order :";
     for (int i = 0; i < res.size(); i++)
