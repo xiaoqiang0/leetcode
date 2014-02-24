@@ -228,14 +228,14 @@ class Solution {
         }
 
         void preorder_left(TreeNode *root, vector<int> &res) {
-            if (root == NULL) 
+            if (root == NULL)
                 return;
             res.push_back(root->val);
             inorder_left(root->left, res);
             inorder_left(root->right, res);
         }
         void preorder_right(TreeNode *root, vector<int> &res) {
-            if (root == NULL) 
+            if (root == NULL)
                 return;
             res.push_back(root->val);
             inorder_right(root->right, res);
@@ -342,7 +342,7 @@ class Solution {
             return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
         }
         void connect(TreeLinkNode *root) {
-            if (root == NULL) return; 
+            if (root == NULL) return;
             if (root->left && root->right)
                 root->left->next = root->right;
             if (root->next && root->right)
@@ -439,7 +439,7 @@ class Solution {
            1
            / \
            2   3
-           Return 6. 
+           Return 6.
          */
         /*Pending*/
         int maxPathSum(TreeNode *root)
@@ -449,6 +449,99 @@ class Solution {
             int r = maxPathSum(root->right);
             return root->val + (l > r ? l : r);
         }
+
+        /*Level Tree*/
+        vector<vector<int> > levelOrder(TreeNode *root) {
+            vector<TreeNode *> S;
+
+            vector<vector<int> > res;
+
+            if (root == NULL) return res;
+
+            S.push_back(root);
+
+            while(!S.empty()) {
+                vector<int> t;
+                int n = S.size();
+                while (n){
+                    TreeNode * node = S.at(S.size() - 1);
+                    t.push_back(node->val);
+                    S.pop_back();
+                    if (node->left)
+                        S.insert(S.begin(), node->left);
+                    if (node->right)
+                        S.insert(S.begin(), node->right);
+                    n--;
+                }
+
+                res.push_back(t);
+            }
+
+            return res;
+        }
+
+        vector<vector<int> > levelOrder2(TreeNode *root) {
+            vector<TreeNode *> S;
+
+            vector<vector<int> > res;
+
+            if (root == NULL) return res;
+
+            S.push_back(root);
+
+            while(!S.empty()) {
+                vector<int> t;
+                int n = S.size();
+                while (n){
+                    TreeNode * node = S.at(S.size() - 1);
+                    t.push_back(node->val);
+                    S.pop_back();
+                    if (node->left)
+                        S.insert(S.begin(), node->left);
+                    if (node->right)
+                        S.insert(S.begin(), node->right);
+                    n--;
+                }
+
+                res.insert(res.begin(), t);
+            }
+
+            return res;
+        }
+
+        vector<vector<int> > levelOrder3(TreeNode *root) {
+            vector<TreeNode *> S;
+            vector<vector<int> > res;
+            int flag = 0;
+
+            if (root == NULL) return res;
+
+            S.push_back(root);
+            flag = 1;
+            while(!S.empty()) {
+                vector<int> t;
+                vector<TreeNode *> cur;
+                int n = S.size();
+                while (n){
+                    TreeNode * node = S.at(S.size() - 1);
+                    if (flag == 1)
+                        t.push_back(node->val);
+                    else
+                        t.insert(t.begin(), node->val);
+                    S.pop_back();
+                    if (node->left)
+                        S.insert(S.begin(), node->left);
+                    if (node->right)
+                        S.insert(S.begin(), node->right);
+                    n--;
+                }
+                flag = (flag + 1) % 2;
+                res.push_back(t);
+            }
+
+            return res;
+        }
+
 };
 
 int main() {
@@ -463,9 +556,9 @@ int main() {
      */
     vector<int> pre, in, post;
 
-    /*   
-         int p[] = 
-         int i[] = 
+    /*
+         int p[] =
+         int i[] =
          for (int j = 0; j < 3000; j++){
          pre.push_back(p[j]);
          in.push_back(i[j]);
@@ -502,12 +595,12 @@ int main() {
      */
 
     Solution S;
-    TreeNode * root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    root->left->left = new TreeNode(3);
+    TreeNode * root = new TreeNode(3);
+    root->left = new TreeNode(9);
+    root->right = new TreeNode(20);
+    root->right->left = new TreeNode(15);
    // root->left->right = new TreeNode(5);
-    root->right->left = new TreeNode(2);
+    root->right->right = new TreeNode(7);
 
 //    root = S.buildTree2(in, post);
     vector<int> res = S.preorderTraversal(root);
@@ -530,7 +623,7 @@ int main() {
     cout << endl;
 
 
-    if (S.hasPathSum(root, 21)) 
+    if (S.hasPathSum(root, 21))
         cout <<"has this path" <<endl;
     vector<vector<int> > r = S.pathSum(root, 21);
 
@@ -542,7 +635,7 @@ int main() {
     cout << endl;
 
     if (S.isSymmetric(root))
-        cout <<"Symmetric tree" <<endl; 
+        cout <<"Symmetric tree" <<endl;
     else
         cout <<"Not Symmetric tree" <<endl;
 
@@ -554,7 +647,7 @@ int main() {
     num.push_back(3);
     num.push_back(4);
     num.push_back(5);
-    root = S.sortedArrayToBST(num);
+//    root = S.sortedArrayToBST(num);
 
     res = S.preorderTraversal(root);
     cout << "pre order :";
@@ -568,9 +661,21 @@ int main() {
         cout << res[i] << " ";
     cout << endl;
 
+    vector<vector<int> > level_res;
+    level_res = S.levelOrder3(root);
+    cout << "level order : ";
+    for (int i = 0; i < level_res.size(); i++){
+        for (int j = 0; j < level_res[i].size(); j ++)
+            cout << level_res[i][j] << " ";
+
+        cout <<endl;
+    }
+
+    cout << endl;
+
     if (S.isValidBST(root))
         cout <<"IS BST"<<endl;
-    else 
+    else
         cout <<"Not BST Tree" <<endl;
 
     return 0;
