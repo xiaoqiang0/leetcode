@@ -65,12 +65,38 @@ class Solution {
             }
 
         }
+
+
+        void sortColors(int A[], int n) {
+            int i, j;
+            j = 0;
+            for (i = 0; i < n; i++){
+                if (A[i] == 0) {
+                    int t = A[j];
+                    A[j] = A[i];
+                    A[i] = t;
+                    j++;
+                }
+            }
+            j = n-1;
+            for (i = n-1; i >= 0; i--){
+                if (A[i] == 0) break;
+                if (A[i] == 2) {
+                    int t = A[j];
+                    A[j] = A[i];
+                    A[i] = t;
+                    j--;
+                }
+            }
+
+        }
 };
 
 int main()
 {
     int A[8] = {1,3,4,5, 8};
     int B[3] = {2, 6, 7};
+    int C[5] = {1,0,2,2,1};
     Solution S;
 
     cout << "New length: " << S.removeElement(A, 1, 1) <<endl;
@@ -82,5 +108,11 @@ int main()
         cout <<A[i] << " ";
 
     cout <<endl;
+    S.sortColors(C, 5);
+
+    for (int i = 0; i < 5 ; i++)
+        cout <<C[i] <<" ";
+    cout <<endl;
+
     return 0;
 }
