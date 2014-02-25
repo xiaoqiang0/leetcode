@@ -34,15 +34,12 @@ class Solution {
            if (m == 1|| n == 1) return 1;
            return uniquePaths(m - 1, n) + uniquePaths(m, n -1);
            } */
+
+
         int _uniquePathsWithObstacles(int m, int n, vector<vector<int> > &A, vector<vector<int> > &obstacleGrid) {
-            if (obstacleGrid[m-1][n-1] == 1){
-                return 0;
-            }
-
+            if (obstacleGrid[m-1][n-1] == -1) return 0;
             if (A[m][n] != 0) return A[m][n];
-
             if (m == 1 || n == 1) {
-                A[m][n] = 1;
                 return A[m][n];
             }
             A[m][n] = _uniquePathsWithObstacles(m-1, n, A, obstacleGrid) + _uniquePathsWithObstacles(m, n-1, A, obstacleGrid);
@@ -59,11 +56,13 @@ class Solution {
                 vector<int> t(n+1, 0);
                 A.push_back(t);
             }
+            if (obstacleGrid[0][0] == 0) A[1][1] = 1;
             _uniquePathsWithObstacles(m, n, A, obstacleGrid);
-
             return A[m][n];
         }
-        
+
+
+
         /*
         int _uniquePathsWithObstacles(int m, int n, vector<vector<int> > &A) {
             if (A[m][n] != 0) return A[m][n];
