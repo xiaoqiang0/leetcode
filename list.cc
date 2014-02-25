@@ -33,7 +33,60 @@ class Solution {
 
             } while (1);
         }
+        ListNode *detectCycle(ListNode *head) {
+            struct ListNode *p, *q, *t;
 
+            p = head;
+            if (p == NULL) return false;
+
+            q = p->next;
+            if (q == NULL) return false;
+
+            do {
+                if (p == q)
+                    break;
+                if (q->next == NULL || q->next->next == NULL)
+                    return NULL;
+
+                q = q->next->next;
+                p = p->next;
+
+            } while (1);
+
+            t = q;
+            p = head;
+            q = t->next;
+            while (p != t && q != t){
+                p = p->next;
+                q = q->next;
+            }
+            if (p != t){
+                q = head;
+                while (p != t){
+                    p = p->next;
+                    q = q->next;
+                }
+                p = t->next;
+            } else if (q != t) {
+                p = t->next;
+                while( q != t){
+                    q = q->next;
+                    p = p->next;
+                }
+                q = head;
+            } else if (q == t && p == t){
+                p = head;
+                q = t->next;
+            }
+
+
+            while (p != q){
+                p = p->next;
+                q = q->next;
+            }
+
+            return p;
+        }
         ListNode *deleteDuplicates(ListNode *head) {
             ListNode *p;
             ListNode *q;
@@ -41,7 +94,7 @@ class Solution {
             if (head == NULL) return NULL;
 
             p = head;
-            
+
             q = p->next;
 
             while (q != 0) {
@@ -65,7 +118,7 @@ class Solution {
         ListNode *p = l1;
         ListNode *q = l2;
         ListNode *t = head;
-        
+
         if (l1 == NULL && l2 == NULL) return NULL;
 
         if (!(p && q)) return q ? q : p;
@@ -123,7 +176,7 @@ class Solution {
                 break;
             q = p->next;
         }
-        
+
         if (p) 
             t->next = p;
 
@@ -139,21 +192,27 @@ int main()
     head->next->next = new ListNode(3);
     head->next->next->next = new ListNode(4);
     head->next->next->next->next = new ListNode(5);
+    head->next->next->next->next->next = head->next;
+
     //head->next->next->next->next->next = head;*/
 
     Solution S;
+    ListNode *p = S.detectCycle(head);
+
+    cout <<p->val <<endl;
+
 /*
     if (S.hasCycle(head))
         cout << "has cycle" <<endl;
     else
         cout << "no cycle" <<endl;
     S.deleteDuplicates(head);
-*/
     head = S.swapPairs(head); 
     while (head) {
         cout <<head->val <<" ";
         head=head->next;
     }
+*/
 
     cout <<endl;
 
