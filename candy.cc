@@ -8,12 +8,13 @@ using namespace std;
 class Solution {
     public:
         int candy(vector<int> &ratings) {
-             stack<int> S;
+            stack<int> S;
             vector<int> A(ratings.size(), 0);
             int n = ratings.size();
 
             if (n == 0|| n == 1)
                 return n;
+
             S.push(0);
             for (int i = 1; i < n; i++){
                 if (ratings[i-1] > ratings[i]) {
@@ -31,12 +32,14 @@ class Solution {
                             A[s] = t;
                         S.pop();
                     }
+
                     if (ratings[i] > ratings[i-1])
                         A[i] = A[i-1] + 1;
                     else
-                        A[i] = A[i-1] - 1 > 0 ? A[i-1] - 1 : 1;
+                        A[i] = 1;
                 }
             }
+
             int t = 0;
             while (!S.empty()) {
                 int s = S.top();
@@ -44,14 +47,13 @@ class Solution {
                     t++;
                 if (S.size() != 1 || A[s] < t)
                     A[s] = t;
-                    
+
                 S.pop();
             }
             int sum = 0;
-            for (int i = 0; i < n; i ++)
+            for (int i = 0; i < n; i ++) {
                 sum +=A[i];
-            if (sum == 1975)
-                sum--;
+            }
             return sum;
         }
 };
