@@ -111,6 +111,29 @@ class Solution {
             return head;
         }
 
+        ListNode *deleteDuplicates2(ListNode *head) {
+            ListNode *p;
+            ListNode *q;
+
+            if (head == NULL) return NULL;
+
+            p = head;
+
+            q = p->next;
+
+            while (q != 0) {
+                if (p->val != q->val) {
+                    p = q;
+                    q = q->next;
+                } else {
+                    p->next = q->next;
+                    delete q;
+                    q = p->next;
+                }
+            }
+
+            return head;
+        }
 
     ListNode *mergeTwoLists(ListNode *l1, ListNode *l2)
     {
