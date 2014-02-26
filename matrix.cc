@@ -79,6 +79,40 @@ class Solution {
 
             return false;
         }
+        void setZeroes(vector<vector<int> > &matrix) {
+            int m = matrix.size();
+            int n;
+
+            #define MAX_TAG 123454321
+
+            if (m > 0)
+                n = matrix[0].size();
+            else
+                return;
+
+            if (n == 0)
+                return;
+            for (int i = 0; i < m; i ++)
+                for (int j = 0; j < n; j++) {
+                    if (matrix[i][j] == 0) {
+                        matrix[i][j] = MAX_TAG;
+                        for (int k = 0; k < m; k ++)
+                            if (matrix[k][j] != 0)
+                                matrix[k][j] = MAX_TAG;
+                        for (int k = 0; k < n; k ++)
+                            if (matrix[i][k] != 0)
+                                matrix[i][k] = MAX_TAG;
+                    }
+                }
+
+            for (int i = 0; i < m; i ++)
+                for (int j = 0; j < n; j++) {
+                    if (matrix[i][j] == MAX_TAG) {
+                        matrix[i][j] = 0;
+                    }
+                }
+
+        }
 };
 
 int main()
@@ -86,33 +120,40 @@ int main()
 
     vector<vector<int> > m;
     vector<int> p1, p2, p3;
+    p1.push_back(0);
     p1.push_back(1);
-//    p1.push_back(2);
-//    p1.push_back(3);
+/*
+    p1.push_back(3);
     p2.push_back(3);
-//    p2.push_back(5);
-//    p2.push_back(6);
-//    p3.push_back(7);
-//    p3.push_back(8);
-//    p3.push_back(9);
-//
+    p2.push_back(5);
+    p2.push_back(6);
+    p3.push_back(7);
+    p3.push_back(8);
+    p3.push_back(9);
+*/
     m.push_back(p1);
+/*
     m.push_back(p2);
-//    m.push_back(p3);
-
+    m.push_back(p3);
+*/
     Solution S;
-    //S.rotate(m);
+
+
+    S.setZeroes(m);
+
+/*
+    S.rotate(m);
     if (S.searchMatrix(m, 1))
         cout <<"Exist " <<endl;
-//
-//    cout <<"rotated Matrix:" <<endl;
-//
-//    for (int i = 0; i < 3; i++){
-//        for (int j=0; j < 3; j++)
-//            cout <<m[i][j];
-//        cout <<endl;
-//    }
-//
+
+    cout <<"rotated Matrix:" <<endl;
+
+    for (int i = 0; i < 3; i++){
+        for (int j=0; j < 3; j++)
+            cout <<m[i][j];
+        cout <<endl;
+    }
+*/
     cout <<endl;
 
     return 0;
