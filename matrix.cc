@@ -113,6 +113,54 @@ class Solution {
                 }
 
         }
+
+
+        int C(int n, int k)
+        {
+            if (n == 0 || n == 1) return 1;
+            if (k == 0 || k == n) return 1;
+
+            if (n-k < k) k = n-k;
+            long m = 1;
+            for (int i = n - k + 1; i <= n; i++)
+                m *= i;
+            for (int i = 1; i <= k; i++)
+                m /= i;
+
+            return m;
+
+        }
+        
+        vector<vector<int> > generate(int numRows) {
+            vector<vector<int> >  res;
+
+            if (numRows == 0) return res;
+            if (numRows == 1) {
+                vector<int> r;
+                r.push_back(1);
+                res.push_back(r);
+                return res;
+            }
+
+            for (int i = 0; i < numRows; i++) {
+                vector<int> r;
+                int t = 1;
+                r.push_back(1);
+                if (i == 0) {
+                    res.push_back(r);
+                    continue;
+                }
+
+                for (int j = 1; j < i; j++) {
+                    t = t*(i - j + 1) / j;
+                    r.push_back(t);
+                }
+                r.push_back(1);
+                res.push_back(r);
+            }
+
+            return res;
+        }
 };
 
 int main()
@@ -139,8 +187,8 @@ int main()
     Solution S;
 
 
-    S.setZeroes(m);
-
+ //   S.setZeroes(m);
+    S.generate(5);
 /*
     S.rotate(m);
     if (S.searchMatrix(m, 1))
