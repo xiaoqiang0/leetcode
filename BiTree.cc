@@ -442,12 +442,36 @@ class Solution {
            Return 6.
          */
         /*Pending*/
+        int get_max(int x, int y, int z)
+        {
+            if (x>y)
+                return x>z?x:z;
+            else
+                return y>z?y:z;
+        }
+
         int maxPathSum(TreeNode *root)
         {
-            if (root == NULL) return 0;
-            int l = maxPathSum(root->left);
-            int r = maxPathSum(root->right);
-            return root->val + (l > r ? l : r);
+            int l, r, t;
+            if (!root->left && !root->right)
+                return root->val;
+            if (root->left)
+                l = maxPathSum(root->left);
+            if (root->right)
+                r = maxPathSum(root->right);
+            
+            if (!root->left) 
+                t = r;
+            else if (!root->right)
+                t = l;
+            else
+                t = getmax
+
+            int sum = root->val + t;
+            if (sum > root->val)
+                return sum > t ? sum : t;
+            else
+                return root->val > t ? root->val : t;
         }
 
         /*Level Tree*/
