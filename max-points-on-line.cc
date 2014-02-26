@@ -4,7 +4,6 @@
 #include <algorithm>
 
 using namespace std;
-#define MAX     1000000
 /**
  * Definition for a point.
  */
@@ -20,10 +19,26 @@ class Solution {
         int maxPoints(vector<Point> &points) {
             int n = points.size();
             int i, j, k;
-
+            #define MAX         10000000
+            #define SAME        1000.0001
             if (n == 0|| n == 1 || n == 2) return n;
 
-            vector<vector<int> > rate (n, vector<int> (n, 0));
+            vector<vector<int> > mark (n, vector<int> (n, 0));
+            vector<vector<float> > rate(n, vector<float> (n, 0));
+
+
+            for (i = 0; i < n - 1;i ++)
+                for(j = i + 1 ; j < n; j++) {
+                    if (points[i].x == points[j].x && points[i].y == points[j].y)
+                        rate[i][j] = SAME;
+                    else {
+                        if (points[i].x = points[j].x)
+                            rate[i][j] = MAX;
+                        else 
+                            rate[i][j] = (points[i].y - points[j].y) * 1.0 / (points[i].x - points[j].x);
+                    }
+
+                }
 
             int sum = 2;
             int same = 1;
@@ -31,18 +46,17 @@ class Solution {
                 for (j = i+1; j < n; j++) {
                     if (points[i].x == points[j].x && points[i].y == points[j].y)
                         continue;
-                    if (rate[i][j] == 1)
+                    if (mark[i][j] == 1)
                         continue;
                     same = 0;
                     int t = 2;
-                    rate[i][j] = rate[j][i] = 1;
+                    mark[i][j] = mark[j][i] = 1;
                     for (k = 0; k < n; k++){
                         if (k == i || k == j)
                             continue;
-                        if ((points[i].y - points[k].y) * (points[j].x - points[k].x) == \
-                            (points[i].x - points[k].x) * (points[j].y - points[k].y) ) {
+                        if (rate[i][j] == rate[i][k] || rate[i][k] == SAME || rate[j][k] == SAME){
                             t++;
-                            rate[i][k] = rate[j][k] = rate[k][i] = rate[k][j] = 1;
+                            mark[i][k] = mark[j][k] = mark[k][i] = mark[k][j] = 1;
                         }
                     }
                     if (t > sum)
