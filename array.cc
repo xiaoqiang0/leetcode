@@ -25,7 +25,25 @@ class Solution {
             }
 
             return i+1;
-            
+
+        }
+
+        int removeDuplicates2 (int A[], int n) {
+            int i = 0, j = 0;
+            int k;
+            if (n == 0) return 0;
+            for (j = 1;j < n; j++){
+                if (A[i] == A[j]){
+                    if (i > 0 && A[i - 1] == A[j])
+                        continue;
+                    else
+                        A[++i] = A[j];
+                } else {
+                    A[++i] = A[j];
+                }
+            }
+            return i+1;
+
         }
 
         int removeDuplicates(int A[], int n) {
@@ -38,8 +56,9 @@ class Solution {
             }
 
             return i+1;
-            
+
         }
+
 
         void merge(int A[], int m, int B[], int n) {
             int i, j, k;
@@ -94,13 +113,14 @@ class Solution {
 
 int main()
 {
-    int A[8] = {1,3,4,5, 8};
+    int A[8] = {1,1,1,2,2,3};
     int B[3] = {2, 6, 7};
     int C[5] = {1,0,2,2,1};
     Solution S;
 
     cout << "New length: " << S.removeElement(A, 1, 1) <<endl;
     cout << "New length: " << S.removeDuplicates(A, 6) <<endl;
+
 
     S.merge(A, 5, B, 3);
 
