@@ -131,7 +131,7 @@ class Solution {
 
         }
         
-        vector<vector<int> > generate(int numRows) {
+        vector<vector<int> > generate (int numRows) {
             vector<vector<int> >  res;
 
             if (numRows == 0) return res;
@@ -161,6 +161,23 @@ class Solution {
 
             return res;
         }
+        vector<int> getRow(int rowIndex) {
+            vector<int> r;
+            int t = 1;
+            r.push_back(1);
+            if (rowIndex == 0 || rowIndex == 1) {
+                vector<int> r;
+                r.push_back(1);
+                return r;
+            } 
+            for (int j = 1; j < rowIndex; j++) {
+                t = t*(rowIndex - j + 1) / j;
+                r.push_back(t);
+                cout << t << " ";
+            }
+            r.push_back(1);
+            return r;
+        }
 };
 
 int main()
@@ -188,7 +205,8 @@ int main()
 
 
  //   S.setZeroes(m);
-    S.generate(5);
+ //   S.generate(5);
+    S.getRow(3);
 /*
     S.rotate(m);
     if (S.searchMatrix(m, 1))

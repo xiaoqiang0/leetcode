@@ -165,7 +165,16 @@ class Solution {
             return res;
         }
 
-
+        vector<int> inorderTraversal_recursive (TreeNode *root) {
+            static vector<int> v;
+            if (root == NULL) {
+                return v;
+            }
+            inorderTraversal_recursive(root->left);
+            v.push_back(root->val);
+            inorderTraversal_recursive(root->right);
+            return v;
+        }
         vector<int> inorderTraversal(TreeNode *root) {
             vector<int> res;
             stack<TreeNode *> S;
@@ -465,7 +474,7 @@ class Solution {
             else if (!root->right)
                 t = l;
             else
-                t = getmax
+                ;
 
             int sum = root->val + t;
             if (sum > root->val)
@@ -619,21 +628,22 @@ int main() {
      */
 
     Solution S;
-    TreeNode * root = new TreeNode(3);
-    root->left = new TreeNode(9);
-    root->right = new TreeNode(20);
+    TreeNode * root = new TreeNode(1);
+    root->left = new TreeNode(2);
+/*    root->right = new TreeNode(20);
     root->right->left = new TreeNode(15);
-   // root->left->right = new TreeNode(5);
+    root->left->right = new TreeNode(5);
     root->right->right = new TreeNode(7);
 
-//    root = S.buildTree2(in, post);
+root = S.buildTree2(in, post); 
+*/
     vector<int> res = S.preorderTraversal(root);
     cout << "pre order :";
     for (int i = 0; i < res.size(); i++)
         cout << res[i] << " ";
     cout <<endl;
 
-    res = S.inorderTraversal(root);
+    res = S.inorderTraversal_recursive(root);
     cout << "in order : ";
     for (int i = 0; i < res.size(); i++)
         cout << res[i] << " ";
