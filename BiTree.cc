@@ -360,6 +360,35 @@ class Solution {
             connect(root->left);
             connect(root->right);
         }
+
+        void connect2(TreeLinkNode *root) {
+            if (root == NULL) return;
+            TreeLinkNode * post;
+            post = root->next;
+            while (post && !post->left && !post->right && post->next){
+                post = post->next;
+            }
+            if (root->left && root->right) {
+                root->left->next = root->right;
+                if (post && post->left)
+                    root->right->next = post->left;
+                else if (post && post->right)
+                    root->right->next = post->right;
+            } else if(root->left && !root->right) {
+                if (post && post->left)
+                    root->left->next = post->left;
+                else if (post && post->right)
+                    root->left->next = post->right;
+            } else if(!root->left && root->right) {
+                if (post && post->left)
+                    root->right->next = post->left;
+                else if (post && post->right)
+                    root->right->next = post->right;
+            }
+            connect(root->right);
+            connect(root->left);
+        }
+
         TreeNode *createArrayToBST(vector<int> &num, int l, int u)
         {
             if(l > u) return NULL;
