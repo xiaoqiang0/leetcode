@@ -16,6 +16,21 @@ class Solution {
 
         };
         int minimumTotal(vector<vector<int> > &triangle) {
+            int n = triangle.size();
+            vector<int> v(n, 0);
+
+            for (int i = n - 1; i >= 0; i --)
+                v[i] = triangle[n - 1][i];
+
+            for (int i = n - 2; i >= 0; i--){
+                for (int j = 0; j <= n - 2; j++)
+                    v[j] = (v[j] > v[j+1] ? v[j+1] : v[j]) + triangle[i][j];
+            }
+
+            return v[0];
+
+        }
+        int minimumTotal1(vector<vector<int> > &triangle) {
             stack<Point> v;
             int n = triangle.size();
             int min = 100000; 
@@ -66,17 +81,17 @@ class Solution {
 
 int main()
 {
-    vector<vector<int> > v(3, vector<int>(3));
+    vector<vector<int> > v(4, vector<int>(4));
+/*
     v[0][0] = -1;
     v[1][0] = 2;v[1][1] = 3;
     v[2][0] = 1;v[2][1] = -1;v[2][2] = -3;
+*/
 
-/*
     v[0][0] = 2;
     v[1][0] = 3;v[1][1] = 4;
     v[2][0] = 6;v[2][1] = 5;v[2][2] = 7;
     v[3][0] = 4;v[3][1] = 1;v[3][2] = 8;v[3][3] = 3;
-*/
     Solution S;
     cout <<    S.minimumTotal(v) <<endl;
     return 0;
