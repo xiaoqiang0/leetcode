@@ -574,6 +574,22 @@ class Solution {
 
             return res;
         }
+        int _sumNumbers(TreeNode *root, int n) {
+            int l = 0, r = 0;
+            if (root == NULL) return 0;
+            if (root->left == NULL && root->right == NULL)
+                return n * 10 + root->val;
+            if (root->left)
+                l = _sumNumbers(root->left, n * 10 + root->val);
+            if (root->right)
+                r = _sumNumbers(root->right, n * 10 + root->val);
+
+            return l + r;
+        }
+
+        int sumNumbers(TreeNode *root) {
+            return _sumNumbers(root, 0);
+        }
 
 };
 
@@ -679,9 +695,7 @@ root = S.buildTree2(in, post);
     num.push_back(1);
     num.push_back(2);
     num.push_back(3);
-    num.push_back(4);
-    num.push_back(5);
-//    root = S.sortedArrayToBST(num);
+    root = S.sortedArrayToBST(num);
 
     res = S.preorderTraversal(root);
     cout << "pre order :";
@@ -711,6 +725,7 @@ root = S.buildTree2(in, post);
         cout <<"IS BST"<<endl;
     else
         cout <<"Not BST Tree" <<endl;
-
+    
+    cout << "Sum number is " << S.sumNumbers(root) <<endl;
     return 0;
 }
