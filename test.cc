@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -19,6 +20,9 @@ int main()
     rate[0][0] = 1;
     rate[1][1] = 1;
 //    res1 = res + 1;
-
+    
+    string s;
+    s.append(to_string (12));
+    cout <<s;
     //std::find(res.begin(), res.end(), 1)!=res.end();
 }
