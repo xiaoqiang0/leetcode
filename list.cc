@@ -206,25 +206,54 @@ class Solution {
         return H;
 
     }
+
+    ListNode *removeNthFromEnd(ListNode *head, int n) {
+        int c = 0;
+
+        ListNode *p = head;
+
+        if (head == NULL) return head;
+        while (p){
+            c++;
+            p = p->next;
+        }
+        
+        if (n > c || n < 0) return head;
+
+        n = c - n;
+        
+        if (n == 0)
+            return head->next;
+        p = head;
+        n--;
+        while (n){
+            p = p->next;
+            n--;
+        }
+
+        p->next = p->next->next;
+        
+        return head;
+    }
 };
 
 int main()
 {
+    Solution S;
     struct ListNode * head = new ListNode(1);
+/*
     head->next= new ListNode(2);
     head->next->next = new ListNode(3);
     head->next->next->next = new ListNode(4);
     head->next->next->next->next = new ListNode(5);
     head->next->next->next->next->next = head->next;
 
-    //head->next->next->next->next->next = head;*/
+    //head->next->next->next->next->next = head;
 
-    Solution S;
     ListNode *p = S.detectCycle(head);
 
     cout <<p->val <<endl;
 
-/*
     if (S.hasCycle(head))
         cout << "has cycle" <<endl;
     else
@@ -236,7 +265,12 @@ int main()
         head=head->next;
     }
 */
+    head = S.removeNthFromEnd(head, 1);
 
+    while (head){
+        cout <<head->val <<" " <<endl;
+        head= head->next;
+    }
     cout <<endl;
 
     return 0;
