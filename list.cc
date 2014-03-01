@@ -235,17 +235,59 @@ class Solution {
         
         return head;
     }
+
+    ListNode *reverseBetween(ListNode *head, int m, int n) {
+        ListNode *p = head;
+        int c = m;
+        ListNode *q, *t;
+
+        c -= 2;
+        while (c > 0){
+            p = p->next;
+            c--;
+        }
+
+        n = n - m;
+        if (m > 1) {
+            if (n >= 0){
+                q = p->next->next;
+                t = p->next;
+            }
+
+            while (t && n){
+                t->next = q->next;
+                q->next = p->next;
+                p->next = q;
+                q = t->next;
+                n--;
+            }
+
+        } else {
+            t = head;
+            q = t->next;
+            while (n) {
+                t->next = q->next;
+                q->next = head;
+                head = q;
+                q = t->next;
+                n--;
+            
+            }
+        }
+
+        return head;
+    }
 };
 
 int main()
 {
     Solution S;
     struct ListNode * head = new ListNode(1);
-/*
     head->next= new ListNode(2);
     head->next->next = new ListNode(3);
     head->next->next->next = new ListNode(4);
     head->next->next->next->next = new ListNode(5);
+/*
     head->next->next->next->next->next = head->next;
 
     //head->next->next->next->next->next = head;
@@ -265,7 +307,7 @@ int main()
         head=head->next;
     }
 */
-    head = S.removeNthFromEnd(head, 1);
+    head = S.reverseBetween(head, 2, 5);
 
     while (head){
         cout <<head->val <<" " <<endl;
