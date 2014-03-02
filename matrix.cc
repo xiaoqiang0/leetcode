@@ -83,7 +83,7 @@ class Solution {
             int m = matrix.size();
             int n;
 
-            #define MAX_TAG 123454321
+#define MAX_TAG 123454321
 
             if (m > 0)
                 n = matrix[0].size();
@@ -130,7 +130,7 @@ class Solution {
             return m;
 
         }
-        
+
         vector<vector<int> > generate (int numRows) {
             vector<vector<int> >  res;
 
@@ -178,6 +178,58 @@ class Solution {
             r.push_back(1);
             return r;
         }
+
+
+        vector<vector<int> > generateMatrix(int n) {
+            vector<vector<int> > res(n, vector<int>(n, 0));
+            int k = 1;
+            int i=0,j=0;
+            int d = 0;
+
+            while (k <= n*n){
+                res[i][j] = k;
+
+                switch (d){
+                    case 0:
+                        if (j == n-1 || res[i][j+1] != 0) {
+                            d = 1;
+                            i++;
+                        } else {
+                            j++;
+                        }
+                        break;
+
+                    case 1:
+                        if (i == n-1 || res[i+1][j] != 0) {
+                            d = 2;
+                            j--;
+                        } else {
+                            i++;
+                        }
+                        break;
+                    case 2:
+                        if (j == 0||res[i][j-1] != 0) {
+                            d = 3;
+                            i--;
+                        } else {
+                            j--;
+                        }
+                        break;
+                    case 3:
+                        if (i == 0 || res[i-1][j] != 0) {
+                            d = 0;
+                            j++;
+                        } else {
+                            i--;
+                        }
+                        break;
+                }
+                k++;
+            }
+
+
+            return res;
+        }
 };
 
 int main()
@@ -187,39 +239,40 @@ int main()
     vector<int> p1, p2, p3;
     p1.push_back(0);
     p1.push_back(1);
-/*
-    p1.push_back(3);
-    p2.push_back(3);
-    p2.push_back(5);
-    p2.push_back(6);
-    p3.push_back(7);
-    p3.push_back(8);
-    p3.push_back(9);
-*/
+    /*
+       p1.push_back(3);
+       p2.push_back(3);
+       p2.push_back(5);
+       p2.push_back(6);
+       p3.push_back(7);
+       p3.push_back(8);
+       p3.push_back(9);
+     */
     m.push_back(p1);
-/*
-    m.push_back(p2);
-    m.push_back(p3);
-*/
+    /*
+       m.push_back(p2);
+       m.push_back(p3);
+     */
     Solution S;
 
 
- //   S.setZeroes(m);
- //   S.generate(5);
+    //   S.setZeroes(m);
+    //   S.generate(5);
     S.getRow(3);
-/*
-    S.rotate(m);
-    if (S.searchMatrix(m, 1))
-        cout <<"Exist " <<endl;
+    /*
+       S.rotate(m);
+       if (S.searchMatrix(m, 1))
+       cout <<"Exist " <<endl;
 
-    cout <<"rotated Matrix:" <<endl;
+     */
+    m = S.generateMatrix(2);
+    cout <<"----rotated Matrix:" <<endl;
 
-    for (int i = 0; i < 3; i++){
-        for (int j=0; j < 3; j++)
+    for (int i = 0; i < 2; i++){
+        for (int j=0; j < 2; j++)
             cout <<m[i][j];
         cout <<endl;
     }
-*/
     cout <<endl;
 
     return 0;
