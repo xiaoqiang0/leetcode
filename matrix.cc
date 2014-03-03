@@ -230,6 +230,80 @@ class Solution {
 
             return res;
         }
+
+        /*
+           Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+
+           For example,
+           Given the following matrix:
+
+           [
+           [ 1, 2, 3 ],
+           [ 4, 5, 6 ],
+           [ 7, 8, 9 ]
+           ]
+
+           You should return [1,2,3,6,9,8,7,4,5]. 
+         */
+
+        vector<int> spiralOrder(vector<vector<int> > &matrix) {
+            vector<int> res;
+            int m = matrix.size();
+            if (m == 0) return res;
+
+            int n = matrix[0].size();
+
+            vector<vector<int> > A(m, vector<int>(n, 0));
+            int k = 1;
+            int i=0,j=0;
+            int d = 0;
+
+            while (k <= m*n){
+                A[i][j] = 1;
+                res.push_back(matrix[i][j]);
+
+                switch (d){
+                    case 0:
+                        if (j == n-1 || A[i][j+1] != 0) {
+                            d = 1;
+                            i++;
+                        } else {
+                            j++;
+                        }
+                        break;
+
+                    case 1:
+                        if (i == m-1 || A[i+1][j] != 0) {
+                            d = 2;
+                            j--;
+                        } else {
+                            i++;
+                        }
+                        break;
+                    case 2:
+                        if (j == 0||A[i][j-1] != 0) {
+                            d = 3;
+                            i--;
+                        } else {
+                            j--;
+                        }
+                        break;
+                    case 3:
+                        if (i == 0 || A[i-1][j] != 0) {
+                            d = 0;
+                            j++;
+                        } else {
+                            i--;
+                        }
+                        break;
+                }
+                k++;
+            }
+
+
+            return res;
+ 
+        }
 };
 
 int main()
@@ -265,14 +339,14 @@ int main()
        cout <<"Exist " <<endl;
 
      */
-    m = S.generateMatrix(2);
+    m = S.generateMatrix(3);
     cout <<"----rotated Matrix:" <<endl;
+    
+    vector<int> r = S.spiralOrder(m);
 
-    for (int i = 0; i < 2; i++){
-        for (int j=0; j < 2; j++)
-            cout <<m[i][j];
-        cout <<endl;
-    }
+    for (int i = 0; i < r.size(); i ++)
+        cout << r[i] << "  " <<endl;
+
     cout <<endl;
 
     return 0;
