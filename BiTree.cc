@@ -2,6 +2,7 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
+#include <limits>
 
 using namespace std;
 
@@ -487,29 +488,86 @@ class Solution {
             else
                 return y>z?y:z;
         }
+        /*
+           Binary Tree Maximum Path Sum(Accepted)
+           Given a binary tree, find the maximum path sum.
+           The path may start and end at any node in the tree.
+           For example:
+           Given the below binary tree,
+            1
+           / \
+           2  3
+           Return 6.
+         */
+        int _maxPathSum(TreeNode *root, int *v)
+        {
+            int l = std::numeric_limits<int>::min();
+            int r = std::numeric_limits<int>::min();
+            int lc = std::numeric_limits<int>::min();
+            int lr = std::numeric_limits<int>::min();
+
+            int ret = root->val;
+
+            if (root->left == NULL && root->right == NULL){
+                *v = root->val;
+                return root->val;
+            }
+
+            if (root->left){
+                l = _maxPathSum(root->left, &lc);
+            }
+            if(root->right){
+                r = _maxPathSum(root->right, &lr);
+            }
+
+            *v = (lc>lr?lc:lr) + root->val;
+
+            if (*v < root->val)
+                *v = root->val;
+
+            if (ret < l)
+                ret = l;
+            if (ret < r)
+                ret = r;
+
+            /*
+               root+left
+             */
+            int t = root->val;
+            if (lc != std::numeric_limits<int>::min())
+                t += lc;
+            if (ret < t)
+                ret = t;
+
+            /*
+               root+right
+             */
+            t = root->val;
+            if (lr != std::numeric_limits<int>::min())
+                t += lr;
+            if (ret < t)
+                ret = t;
+
+            /*
+               left+root+right
+             */
+            t = root->val;
+            if (lr != std::numeric_limits<int>::min())
+                t += lr;
+            if (lc != std::numeric_limits<int>::min())
+                t += lc;
+            if (ret < t)
+                ret = t;
+
+            return ret;
+        }
 
         int maxPathSum(TreeNode *root)
         {
-            int l, r, t;
-            if (!root->left && !root->right)
-                return root->val;
-            if (root->left)
-                l = maxPathSum(root->left);
-            if (root->right)
-                r = maxPathSum(root->right);
-            
-            if (!root->left) 
-                t = r;
-            else if (!root->right)
-                t = l;
-            else
-                ;
-
-            int sum = root->val + t;
-            if (sum > root->val)
-                return sum > t ? sum : t;
-            else
-                return root->val > t ? root->val : t;
+            int v;
+            if (root == NULL)
+                return 0;
+            return _maxPathSum(root, &v);
         }
 
         /*Level Tree*/
@@ -620,18 +678,18 @@ class Solution {
             return _sumNumbers(root, 0);
         }
         /*
-            root: Tree node
-            next: return the last pointer of tree
-            retval: return the first pointer of tree
+root: Tree node
+next: return the last pointer of tree
+retval: return the first pointer of tree
          */
         TreeNode *_flatten(TreeNode *root, TreeNode **next)
         { 
             TreeNode *post = NULL;
             TreeNode *prep = NULL;
             /*
-                root->left->right = root->right
-                root->right = root->left;
-            */
+               root->left->right = root->right
+               root->right = root->left;
+             */
             if (root->left == NULL && root->right ==NULL) {
                 if (next) *next = root;
                 return root;
@@ -654,8 +712,8 @@ class Solution {
                 if (next)
                     *next = p;
             } else {
-                    if (post && next)
-                        *next = post;
+                if (post && next)
+                    *next = post;
             }
             root->right = prep;
             return root;
@@ -798,6 +856,7 @@ int main() {
         cout <<endl;
     }
 
+    //cout << "Sum number is " << S.sumNumbers(root) <<endl;
     cout << endl;
 
     if (S.isValidBST(root))
@@ -807,7 +866,17 @@ int main() {
     
     S.flatten(root);
 
-    //cout << "Sum number is " << S.sumNumbers(root) <<endl;
+    root = new TreeNode(5);
+    root->left = new TreeNode(4);
+    root->left->left = new TreeNode(11);
+    root->left->left->right = new TreeNode(2);
+    root->left->left->left= new TreeNode(7);
 
+    root->right = new TreeNode(8);
+    root->right->right = new TreeNode(4);
+    root->right->right->right = new TreeNode(1);
+    root->right->left = new TreeNode(13);
+
+    cout << "Max Sum is: " << S.maxPathSum(root) << endl;
     return 0;
 }
