@@ -619,6 +619,52 @@ class Solution {
         int sumNumbers(TreeNode *root) {
             return _sumNumbers(root, 0);
         }
+        /*
+            root: Tree node
+            next: return the last pointer of tree
+            retval: return the first pointer of tree
+         */
+        TreeNode *_flatten(TreeNode *root, TreeNode **next)
+        { 
+            TreeNode *post = NULL;
+            TreeNode *prep = NULL;
+            /*
+                root->left->right = root->right
+                root->right = root->left;
+            */
+            if (root->left == NULL && root->right ==NULL) {
+                if (next) *next = root;
+                return root;
+            }
+
+            if (root->left){
+                prep = _flatten(root->left, &post);
+
+                post->right = root->right;
+                root->left = NULL;
+            } else {
+                prep = root->right;
+            }
+
+            //post = NULL;
+            if (root->right){
+                TreeNode *p = NULL;
+                _flatten(root->right, &p);
+
+                if (next)
+                    *next = p;
+            } else {
+                    if (post && next)
+                        *next = post;
+            }
+            root->right = prep;
+            return root;
+        }
+
+        void flatten(TreeNode *root) {
+            if (root == NULL) return ;
+            _flatten(root, NULL);
+        }
 
 };
 
@@ -675,12 +721,16 @@ int main() {
     Solution S;
     TreeNode * root = new TreeNode(1);
     root->left = new TreeNode(2);
-/*    root->right = new TreeNode(20);
+/*
+    root->left = new TreeNode(1);
+    root->left->right = new TreeNode(3);
+    root->left->right->left = new TreeNode(2);
+  root->right = new TreeNode(20);
     root->right->left = new TreeNode(15);
     root->left->right = new TreeNode(5);
     root->right->right = new TreeNode(7);
 
-root = S.buildTree2(in, post); 
+    root = S.buildTree2(in, post); 
 */
     vector<int> res = S.preorderTraversal(root);
     cout << "pre order :";
@@ -723,8 +773,8 @@ root = S.buildTree2(in, post);
     vector<int> num;
     num.push_back(1);
     num.push_back(2);
-    num.push_back(3);
-    root = S.sortedArrayToBST(num);
+    //num.push_back(3);
+    //root = S.sortedArrayToBST(num);
 
     res = S.preorderTraversal(root);
     cout << "pre order :";
@@ -755,6 +805,9 @@ root = S.buildTree2(in, post);
     else
         cout <<"Not BST Tree" <<endl;
     
-    cout << "Sum number is " << S.sumNumbers(root) <<endl;
+    S.flatten(root);
+
+    //cout << "Sum number is " << S.sumNumbers(root) <<endl;
+
     return 0;
 }
