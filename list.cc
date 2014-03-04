@@ -287,16 +287,44 @@ class Solution {
 
         return head;
     }
+
+    ListNode *rotateRight(ListNode *head, int k) {
+        int n = 0;
+        ListNode *p = head;
+        ListNode *q = head;
+        if (head == NULL) return head;
+
+        while (p){
+            n++;
+            q = p;
+            p=p->next;
+        }
+        k = k % n;
+
+        k = n - k;
+        p = head;
+        while (k){
+            q->next = p;
+            p = p->next;
+            q = q->next;
+            q->next = NULL;
+            k--;
+        }
+
+        head = p;
+
+        return head;
+    }
 };
 
 int main()
 {
     Solution S;
     struct ListNode * head = new ListNode(1);
-    head->next= new ListNode(2);
-    head->next->next = new ListNode(2);
 /*
-    head->next->next->next = new ListNode(2);
+    head->next= new ListNode(2);
+    head->next->next = new ListNode(3);
+    head->next->next->next = new ListNode(4);
     head->next->next->next->next = new ListNode(5);
     head->next->next->next->next->next = head->next;
 
@@ -318,7 +346,7 @@ int main()
     }
     head = S.reverseBetween(head, 2, 5);
 */
-    head = S.deleteDuplicates2(head);
+    head = S.rotateRight(head, 2);
     while (head){
         cout <<head->val <<" " <<endl;
         head= head->next;
