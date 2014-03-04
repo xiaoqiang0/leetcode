@@ -117,18 +117,28 @@ class Solution {
 
             if (head == NULL) return NULL;
 
-            p = head;
+            p = NULL;
 
-            q = p->next;
-
+            q = head;
+            head = NULL;
             while (q != 0) {
-                if (p->val != q->val) {
+                ListNode *t = q;
+                if (q->next && q->next->val == q->val){
+                    while (q->next && q->next->val == q->val)
+                        q=q->next;
+                    q = q->next;
+                    continue;
+                }
+                if (p == NULL){
+                    head = q;
                     p = q;
                     q = q->next;
-                } else {
-                    p->next = q->next;
-                    delete q;
-                    q = p->next;
+                    p->next = NULL;
+                }else {
+                    p->next = q;
+                    p = q;
+                    q = q->next;
+                    p->next = NULL;
                 }
             }
 
@@ -284,10 +294,10 @@ int main()
     Solution S;
     struct ListNode * head = new ListNode(1);
     head->next= new ListNode(2);
-    head->next->next = new ListNode(3);
-    head->next->next->next = new ListNode(4);
-    head->next->next->next->next = new ListNode(5);
+    head->next->next = new ListNode(2);
 /*
+    head->next->next->next = new ListNode(2);
+    head->next->next->next->next = new ListNode(5);
     head->next->next->next->next->next = head->next;
 
     //head->next->next->next->next->next = head;
@@ -306,9 +316,9 @@ int main()
         cout <<head->val <<" ";
         head=head->next;
     }
-*/
     head = S.reverseBetween(head, 2, 5);
-
+*/
+    head = S.deleteDuplicates2(head);
     while (head){
         cout <<head->val <<" " <<endl;
         head= head->next;
