@@ -56,22 +56,31 @@ class Solution {
 
 int main()
 {
-    ListNode * head = new ListNode(2);
-    head->next= new ListNode(1);
-/*
-    head->next->next = new ListNode(4);
-    head->next->next->next = new ListNode(3);
-    head->next->next->next->next = new ListNode(5);
-    head->next->next->next->next->next = new ListNode(6);
-*/
+    ListNode * head = NULL, *p;
+
+    for (int i = 0; i < 50000; i++) {
+        ListNode *t = new ListNode(1);
+        if (head == NULL){
+            head = t;
+            p = t;
+        } else {
+
+            p ->next = t;
+            p = t;
+        }
+    }
+    /*
+       head->next->next = new ListNode(4);
+       head->next->next->next = new ListNode(3);
+       head->next->next->next->next = new ListNode(5);
+       head->next->next->next->next->next = new ListNode(6);
+     */
 
     Solution S;
-    ListNode *p;
     p = S.insertionSortList(head);
     while (p){
-        cout <<p->val<< " ";
+        cout <<p->val<<endl;
         p = p->next;
     }
-    cout <<endl;
     return 0;
 }
