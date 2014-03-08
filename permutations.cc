@@ -35,6 +35,46 @@ class Solution {
 
             return res;
         }
+
+        string getPermutation1(int n, int k) {
+            vector<int> A(n, 0);
+            for (int i = 0 ; i < n; i ++)
+                A[i] = i+1;
+            vector<vector<int> > res = permute(A);
+
+            string r;
+
+            for (int i = 0; i < n; i ++)
+                r.append(to_string(res[k-1][i]));
+
+            return r;
+        }
+
+
+        string getPermutation(int n, int k) {
+            vector<int> A(n, 0);
+            for (int i = 0 ; i < n; i ++)
+                A[i] = i+1;
+            k--;           
+            string r;
+            int total = 1;
+            for (int i = 1; i <= n; i ++)
+                total *= i;
+            for (int i = 0; i < n; i ++) {
+                //i
+                //total/n
+                total /= n-i;
+                int idx = k / total;
+
+                r.append(to_string(A[idx]));
+                for (int j = idx + 1; j < n - i; j++)
+                    A[j-1] = A[j];
+                k = k % total;
+            }
+
+            return r;
+        }
+
 };
 
 int main()
@@ -51,6 +91,9 @@ int main()
             cout <<res[i][j];
         cout <<endl;
     }
-
+        cout <<endl;
+    
+    for (int i = 1; i <= 6; i++)
+        cout <<S.getPermutation(3, i) <<endl;
     return 0;
 }
