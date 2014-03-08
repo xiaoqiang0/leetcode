@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <limits>
 #include <string>
+#include <set>
+
 using namespace std;
 
 class Solution {
@@ -15,11 +17,11 @@ class Solution {
             A[i] = A[j];
             A[j] = t;
         }
-        void gen(vector<int > &A, int m, vector<vector <int> > &res)
+        void gen(vector<int > &A, int m, set<vector <int> > &res)
         {
             int n = A.size();
             if  (n == m + 1){
-                res.push_back(A);
+                res.insert(A);
             }else{
                 int j;
                 for (j = m; j < n; j++){
@@ -31,11 +33,21 @@ class Solution {
         }
         vector<vector<int> > permute(vector<int> &num) {
             vector<vector<int> >  res;
-            gen(num, 0, res);
+            set<vector<int> >  r;
+            gen(num, 0, r);
+            res.assign(r.begin(), r.end());
 
             return res;
         }
+        vector<vector<int> > permuteUnique(vector<int> &num) {
+            vector<vector<int> >  res;
+            set<vector<int> >  r;
+            gen(num, 0, r);
+            res.assign(r.begin(), r.end());
 
+            return res;
+
+        }
         string getPermutation1(int n, int k) {
             vector<int> A(n, 0);
             for (int i = 0 ; i < n; i ++)
@@ -114,30 +126,30 @@ class Solution {
 
 int main()
 {
-    int num = 2;
+    int num = 3;
+    int x[] = {3,3,0,0,2,3,2};
     Solution S;
-    vector<int> A(num, 0);
-    for (int i = 0 ; i < num; i ++)
-        A[i] = i+1;
-    A[1] = 1;
+    vector<int> A;
+    for (int i = 0 ; i < sizeof(x)/sizeof(int); i ++)
+        A.push_back(x[i]);
+    vector<vector<int> > res = S.permute(A);
+
+    for (int i = 0; i < res.size(); i++){
+        for (int j = 0; j < res[i].size(); j++)
+            cout <<res[i][j];
+        cout <<endl;
+    }
+    cout <<endl;
+
     /*
-       vector<vector<int> > res = S.permute(A);
-
-       for (int i = 0; i < res.size(); i++){
-       for (int j = 0; j < res[i].size(); j++)
-       cout <<res[i][j];
-       cout <<endl;
-       }
-       cout <<endl;
-
        for (int i = 1; i <= 6; i++)
        cout <<S.getPermutation(3, i) <<endl;
-     */
-    S.nextPermutation(A);
+       S.nextPermutation(A);
 
-    for (int i = 0 ; i < num; i ++)
-        cout <<A[i];
-    cout <<endl;
+       for (int i = 0 ; i < num; i ++)
+       cout <<A[i];
+       cout <<endl;
+     */
 
     return 0;
 }
