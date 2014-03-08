@@ -74,26 +74,70 @@ class Solution {
 
             return r;
         }
+        void reverse(vector<int> &num, int i)
+        {
+            for (int k = 0; k < (num.size() - i)/2; k++){
+                int t = num[k+i];
+                num[k+i] = num[num.size()-k-1];
+                num[num.size()-k-1] = t;
+            }
+        }
+        void nextPermutation(vector<int> &num) {
 
+            int i = -1, j = -1;
+            if (num.size() == 1) return;
+
+            for (int k = 1; k < num.size(); k++){
+                if (num[k-1] < num[k] && i<k)
+                    i = k;
+            }
+            if (i == -1) {
+                reverse(num, 0);
+                return ;
+            }
+            for (int k = 0; k < num.size(); k++){
+                if (num[i-1] < num[k] && j<k)
+                    j = k;
+            }
+
+            if (i == -1||j == -1)
+                return;
+            int t = num[i-1];
+            num[i-1] = num[j];
+            num[j] = t;
+
+            reverse(num, i);
+
+            return ;
+        }
 };
 
 int main()
 {
-    int num = 3;
+    int num = 2;
     Solution S;
     vector<int> A(num, 0);
     for (int i = 0 ; i < num; i ++)
         A[i] = i+1;
-    vector<vector<int> > res = S.permute(A);
+    A[1] = 1;
+    /*
+       vector<vector<int> > res = S.permute(A);
 
-    for (int i = 0; i < res.size(); i++){
-        for (int j = 0; j < res[i].size(); j++)
-            cout <<res[i][j];
-        cout <<endl;
-    }
-        cout <<endl;
-    
-    for (int i = 1; i <= 6; i++)
-        cout <<S.getPermutation(3, i) <<endl;
+       for (int i = 0; i < res.size(); i++){
+       for (int j = 0; j < res[i].size(); j++)
+       cout <<res[i][j];
+       cout <<endl;
+       }
+       cout <<endl;
+
+       for (int i = 1; i <= 6; i++)
+       cout <<S.getPermutation(3, i) <<endl;
+     */
+    S.nextPermutation(A);
+
+    for (int i = 0 ; i < num; i ++)
+        cout <<A[i];
+    cout <<endl;
+
     return 0;
 }
