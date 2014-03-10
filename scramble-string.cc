@@ -40,43 +40,51 @@
 using namespace std;
 class Solution {
 public:
-    set <string> gen(string s, int l, int u, vector<vector<set<string> > > &tab)
+    bool gen(string s1, int l1, int u1, string s2, int l2, int u2)
     {
-        set <string> ret;
-        set <string> left;
-        set <string> right;
-        if (tab[l][u].empty() == false)
-            return tab[l][u];
+        bool res = false;
+        if (l1 == u1 && l2 == u2 && s1[l1] == s2[l2])
+            return true;
 
-        if (l == u){
-            ret.insert(string(1, s[l]));
-            tab[l][u] = ret;
-            return ret;
+        for (int i = l1; i < u1; i++) {
+            string s1_l(s1.substr(l1, i - l1 + 1));
+            string s1_r(s1.substr(i+1, u1-i));
+            
+            string s2_l(s2.substr(l2, i - l1 + 1));
+            string s2_r(s2.substr(l2 + (i-l1) + 1, u1-i));
+            
+            sort(s1_l.begin(), s1_l.end());
+            sort(s1_r.begin(), s1_r.end());
+        
+            sort(s2_l.begin(), s2_l.end());
+            sort(s2_r.begin(), s2_r.end());
+            
+            if (s1_l.compare(s2_l) == 0 && s1_r.compare(s2_r) == 0)
+                res = res || (gen(s1, l1, i,  s2, l2, l2 + (i - l1) ) && \
+                              gen(s1, i+1, u1,s2, l2 + (i - l1) + 1, u2));
+            
+            if (res == true)
+                return true;
+
+            s2_l = s2.substr(l2, (u1 - i));
+            s2_r = s2.substr(l2 +(u1 - i), i - l1 +1);
+
+            sort(s2_l.begin(), s2_l.end());
+            sort(s2_r.begin(), s2_r.end());
+
+            if (s1_l.compare(s2_r) == 0 && s1_r.compare(s2_l) == 0)
+                res = res || (gen(s1, l1, i,s2, u2 - (i - l1), u2) ) && \
+                              gen(s1, i+1, u1, s2, l2, u2 - (i - l1) - 1 );
+
+            if (res == true)
+                return true;
         }
 
-        for (int i = l; i < u; i++){
-            left = gen(s, l, i, tab);
-            right = gen(s, i+1, u, tab);
-            for (set <string>::iterator it= left.begin() ; it != left.end(); it++)
-                for (set <string>::iterator itr= right.begin() ; itr != right.end(); itr++) {
-                    ret.insert(*it + *itr);
-                    ret.insert(*itr + *it);
-                }
-        }
-
-        tab[l][u] = ret;
-        return ret;
-
+        return res;
     }
     bool isScramble(string s1, string s2) {
         vector<char> cur;
-        set <string> ret;
-        vector<vector<set<string> > > tab(s1.length()+1, vector<set<string> > (s2.length()+1, set<string>()));
-        ret = gen(s1, 0, s1.length()-1, tab);
-
-        if (ret.find(s2) == ret.end())
-            return false;
-        return true;
+        return gen(s1, 0, s1.length()-1, s2, 0, s2.length()-1);
 
 /*
         for (set <string>::iterator it= ret.begin() ; it != ret.end(); it++)
@@ -87,10 +95,12 @@ public:
 int main()
 {
     Solution S;
-    //string s1("great");
-    //string s2("rgeat");
-    string s1("abcdefghijklmn");
-    string s2("efghijklmncadb");
+    //string s1("egr");
+    //string s2("gre");
+    string s1("great");
+    string s2("rgeat");
+    //string s1("abcdefghijklmn");
+    //string s2("efghijklmncadb");
 
     if (S.isScramble(s1,s2))
         cout <<"OK" <<endl;
