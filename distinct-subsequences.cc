@@ -8,7 +8,8 @@
 using namespace std;
 class Solution {
     public:
-        void compute(string S, int i, string T, int j, int &n) {
+        void compute(string S, int i, string T, int j, int &n, vector<vector<int> > &v) {
+            int sum = 0;
             if (j == T.length()) {
                 n++;
                 return;
@@ -16,15 +17,16 @@ class Solution {
             if (i > S.length())
                 return;
             if (S[i] == T[j]){
-                compute(S, i+1, T, j+1, n);
-                compute(S, i+1, T, j, n);
+                compute(S, i+1, T, j+1, n, v);
+                compute(S, i+1, T, j, n, v);
             } else {
-                compute(S, i+1, T, j, n);
+                compute(S, i+1, T, j, n, v);
             }
         }
         int numDistinct(string S, string T) {
             int n = 0;
-            compute(S, 0, T, 0, n);
+            vector<vector<int> > v(S.length() +1 , vector<int>(T.length()+1, 0));
+            compute(S, 0, T, 0, n, v);
             return n;
         }
 };
