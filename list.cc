@@ -305,6 +305,60 @@ class Solution {
         return head;
     }
 
+    ListNode *reverseKGroup(ListNode *head, int k)
+    {
+        ListNode *p, *q, *s, *t, *x = NULL;
+        ListNode *new_head = NULL;
+        t = head;
+        p = head;
+        q = head;
+
+        while (t){
+            int c = k-1;
+
+            while (t && c){
+                t=t->next;
+                c--;
+            }
+
+            if (t == NULL ||c > 0)
+                break;
+
+            //reverse
+            q = t;
+            s = p;
+            if (new_head == NULL) new_head = q;
+            
+            while(s != q) {
+                if (x == NULL) {
+                    s=s->next;
+                } else {
+                    x->next = p->next;
+                    s = x->next;
+                }
+                p->next = q->next;
+                q->next = p;
+                p = s;
+            }
+
+            //find end;
+            c = k-1;
+            x = q;
+            while (c){
+                x=x->next;
+                c--;
+            }
+
+            t = x->next;
+            p = t;
+        }
+        
+        if (new_head == NULL)
+            return head;
+        else
+            return new_head;
+    }
+
     ListNode *rotateRight(ListNode *head, int k) {
         int n = 0;
         ListNode *p = head;
@@ -338,11 +392,11 @@ int main()
 {
     Solution S;
     struct ListNode * head = new ListNode(1);
-/*
     head->next= new ListNode(2);
     head->next->next = new ListNode(3);
     head->next->next->next = new ListNode(4);
     head->next->next->next->next = new ListNode(5);
+/*
     head->next->next->next->next->next = head->next;
 
     //head->next->next->next->next->next = head;
@@ -362,8 +416,9 @@ int main()
         head=head->next;
     }
     head = S.reverseBetween(head, 2, 5);
-*/
     head = S.rotateRight(head, 2);
+*/
+    head = S.reverseKGroup(head, 1);
     while (head){
         cout <<head->val <<" " <<endl;
         head= head->next;
