@@ -180,6 +180,23 @@ class Solution {
 
         return head;
     }
+    ListNode *mergeKLists(vector<ListNode *> &lists) {
+        int n = lists.size();
+
+        if (n == 0) return NULL;
+        if (n == 1) return lists[0];
+
+        ListNode *head, *p;
+
+        head = lists[0];
+
+        for (int i = 1; i < n; i++){
+            p = lists[i];
+
+            head = mergeTwoLists(head, p);
+        }
+        return head;
+    }
 
     ListNode *swapPairs(ListNode *head) {
         ListNode *p;
