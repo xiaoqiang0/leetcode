@@ -9,6 +9,7 @@ using namespace std;
 class Solution {
     public:
         int divide(int dividend, int divisor) {
+            
             if (dividend == 0) return 0;
             if (divisor == 0) {
                 if (dividend > 0)
@@ -27,24 +28,29 @@ class Solution {
             else
                 flag = -1;
 
-            if (divisor < 0) divisor = -divisor;
-            if (dividend< 0) dividend= -dividend;
-
-            while ((divisor & 0x1) == 0) {
-                divisor >>= 1;
-                dividend>>= 1;
+            long long ds = divisor, dd = dividend;
+            if (divisor < 0) ds = 0-ds;
+            if (dividend< 0) dd = 0-dd;
+            
+            long long int d = ds;
+            int w = 0;
+            while (d <= dd){
+                d <<= 1;
+                w++;
             }
-
-            if (divisor != 1) {
-                while (dividend > 0){
-                    if (dividend - divisor >= 0){
-                        k++;
-                        dividend = dividend-divisor;
-                    }else
-                        break;
+            
+            d >>= 1;
+            int start = w - 1;
+            while(dd >= ds){
+                long long x = d;
+                
+                if (x <= dd) {
+                    k += 1<<start;
+                    dd -= x;
                 }
-            } else
-                k = dividend;
+                d >>= 1;
+                start--; 
+            }
 
             return k*flag;
         }
@@ -53,7 +59,9 @@ int main()
 {
     Solution S;
 
-    cout <<S.divide(2147483647, 2)<<endl;
+    cout <<S.divide(1, -1)<<endl;
+    cout <<S.divide(1010369383, 2147483648)<<endl;
+    cout <<S.divide(100, 3)<<endl;
 
     return 0;
 }
