@@ -25,6 +25,8 @@ class Solution {
             }else{
                 int j;
                 for (j = m; j < n; j++){
+                    if (j > m && A[j] == A[j-1])
+                        continue;
                     swap(A,m,j);
                     gen(A,m + 1, res);
                     swap(A,m,j);
@@ -36,7 +38,6 @@ class Solution {
             set<vector<int> >  r;
             gen(num, 0, r);
             res.assign(r.begin(), r.end());
-
             return res;
         }
         vector<vector<int> > permuteUnique(vector<int> &num) {
@@ -132,15 +133,13 @@ int main()
     vector<int> A;
     for (int i = 0 ; i < sizeof(x)/sizeof(int); i ++)
         A.push_back(x[i]);
-    vector<vector<int> > res = S.permute(A);
-
+    vector<vector<int> > res = S.permuteUnique(A);
     for (int i = 0; i < res.size(); i++){
         for (int j = 0; j < res[i].size(); j++)
             cout <<res[i][j];
         cout <<endl;
     }
     cout <<endl;
-
     /*
        for (int i = 1; i <= 6; i++)
        cout <<S.getPermutation(3, i) <<endl;
