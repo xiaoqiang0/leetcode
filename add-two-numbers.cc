@@ -17,28 +17,20 @@ struct ListNode {
 class Solution {
     public:
         ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
-            stack<ListNode *> S1, S2, S;
-            ListNode *p, *q;
-
+            ListNode *p, *q, *t;
+            ListNode *head = NULL;
             p = l1;
-            while (p) {
-                S1.push(p);
-                p = p->next;
-            }
-            p = l2;
-            while (p) {
-                S2.push(p);
-                p = p->next;
-            }
-            
-            if (S1.empty()) return l2;
-            if (S2.empty()) return l1;
+
+            if (l1 == NULL) return l2;
+            if (l2 == NULL) return l1;
             
             int flag = 0;
-            while (!S1.empty() && !S2.empty()) {
+            t = NULL;
+            p = l1; q = l2;
+            while (p && q) {
                 //ListNode *op1 = S1.top();
                 //ListNode *op2 = S2.top();
-                int v = S1.top()->val + S2.top()->val;
+                int v = p->val + q->val;
 
                 if (flag == 1)
                     v++;
@@ -50,14 +42,21 @@ class Solution {
                     flag = 0;
 
                 ListNode *node = new ListNode(v);
+                
+                if (head == NULL){
+                    head = node;
+                    t = node;
+                }else{
+                    t->next = node;
+                    t = node;
+                }
 
-                S.push(node);
-
-                S1.pop(); S2.pop();
+                p = p->next;
+                q = q->next;
             }
 
-            if (!S1.empty()){
-                int v = S1.top()->val;
+            while (p){
+                int v = p->val;
 
                 if (flag == 1)
                     v++;
@@ -69,15 +68,19 @@ class Solution {
                     flag = 0;
 
                 ListNode *node = new ListNode(v);
-
-                S.push(node);
-
-                S1.pop();
+                if (head == NULL){
+                    head = node;
+                    t = node;
+            }else{
+                    t->next = node;
+                    t = node;
+                }
+                p = p->next;
             }
 
 
-            if (!S2.empty()){
-                int v = S2.top()->val;
+            while (q){
+                int v = q->val;
 
                 if (flag == 1)
                     v++;
@@ -89,48 +92,46 @@ class Solution {
                     flag = 0;
 
                 ListNode *node = new ListNode(v);
-
-                S.push(node);
-
-                S2.pop();
+                if (head == NULL) {
+                    head = node;
+                    t = node;
+                }else{
+                    t->next = node;
+                    t = node;
+                }
+                q=q->next;
             }
 
             if (flag == 1) {
-                S.push(new ListNode(1));
+                ListNode *node = new ListNode(1);
+                if (head == NULL){
+                    head = node;
+                    t = node;
+                }else{
+                    t->next = node;
+                    t = node;
+                }
             }
             
             //Link all nodes to on list
             
-            ListNode *head = NULL;
-            p = NULL;
-            while (!S.empty()){
-                q = S.top();
-                if (p == NULL){
-                    p = q;
-                } else {
-                    q->next = p;
-                    p = q;
-                }
-
-                S.pop();
-            }
-            return p;
+            return head;
         }
 };
 int main()
 {
-    struct ListNode * head1 = new ListNode(1);
-    head1->next= new ListNode(2);
-    head1->next->next = new ListNode(3);
-    head1->next->next->next = new ListNode(4);
-    head1->next->next->next->next = new ListNode(5);
+    struct ListNode * head1 = new ListNode(9);
+    head1->next= new ListNode(1);
+    head1->next->next = new ListNode(6);
+//    head1->next->next->next = new ListNode(4);
+//    head1->next->next->next->next = new ListNode(5);
 
-struct ListNode * head2 = new ListNode(1);
-    head2->next= new ListNode(2);
+struct ListNode * head2 = new ListNode(0);
+/*    head2->next= new ListNode(2);
     head2->next->next = new ListNode(3);
     head2->next->next->next = new ListNode(4);
     head2->next->next->next->next = new ListNode(5);
-
+*/
     Solution S;
     ListNode *head = S.addTwoNumbers(head1, head2);
     while (head){
