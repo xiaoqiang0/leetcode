@@ -8,13 +8,13 @@ using namespace std;
 class Solution {
     public:
 /*
-        |
-        | d(i-1, j-1) if word2
-        |
-d(i,j) =| 
-        |
-        |
-        |
+           |--
+           | d(i-1, j-1) if word2
+           | d[i-1][j-1]+1 // swap
+d(i,j)= min|
+           | d[i][j-1] + 1 // insert
+           | d[i-1][j] + 1 // delete
+           |--
 
  */
         int compute(string s1, string s2, vector<vector<int> > &d)
@@ -37,9 +37,9 @@ d(i,j) =|
                         d[i][j] = d[i-1][j-1];
                     if (word1[i-1] != word2[j-1] && d[i-1][j-1]+1<d[i][j]) //change
                         d[i][j] = d[i-1][j-1]+1;
-                    if (d[i-1][j] + 1 < d[i][j])
+                    if (d[i-1][j] + 1 < d[i][j]) // delete
                         d[i][j] = d[i-1][j] + 1;
-                    if (d[i][j-1] + 1 < d[i][j])
+                    if (d[i][j-1] + 1 < d[i][j]) // insert
                         d[i][j] = d[i][j-1] + 1;
                 }
 
