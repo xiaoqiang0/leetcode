@@ -9,7 +9,7 @@ using namespace std;
 
 class Solution {
     public:
-        int sqrt(int x) {
+        int sqrt1(int x) {
             if (x == 0) return 0;
             long long u = x/2+1, l = 0;
 
@@ -27,6 +27,7 @@ class Solution {
 
             return u;
         }
+
         int sqrt(int x) {
             long long i = 0;
             long long j = x / 2 + 1;

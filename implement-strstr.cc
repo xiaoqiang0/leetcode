@@ -42,6 +42,7 @@ class Solution {
 
             int i = 0;    
             int j = 0;    
+            int slen = strlen(haystack);
             while ( i < slen && j < plen )    {    
                 if( j == -1 || haystack[i] == needle[j] ){    
                     ++i;    

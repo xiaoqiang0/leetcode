@@ -3,7 +3,6 @@
 #include <stack>
 #include <algorithm>
 
-int main;
 using namespace std;
 
 class Solution {
