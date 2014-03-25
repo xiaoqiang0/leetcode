@@ -152,9 +152,9 @@ class Solution {
             map<int, vector<pair<pair<int, int>, pair<int, int> > > > m;
             if (num.size() < 4) return res;
             for (int i = 0; i < num.size()-1; i ++){
-                if (i > 0&&num[i] == num[i-1]) continue;
+                //if (i > 0&&num[i] == num[i-1]) continue;
                 for (int j = i+1; j < num.size(); j++){
-                    if (j != i+1 && num[j] == num[j-1]) continue;
+                //    if (j != i+1 && num[j] == num[j-1]) continue;
                     m[num[i]+num[j]].push_back(make_pair(make_pair(i, num[i]),
                                                          make_pair(j, num[j])));
                 }
@@ -228,7 +228,8 @@ int main()
     Solution S;
     cout << S.threeSumClosest(v, -1) <<endl;
      */
-      int A[] = {1, 0, -1, 0, -2, 2};
+      //int A[] = {1, 0, -1, 0, -2, 2};
+      int A[] = {0, 0, 0, 0};
       vector<int> v;
       v.assign(A, A+sizeof(A)/sizeof(int));
 
