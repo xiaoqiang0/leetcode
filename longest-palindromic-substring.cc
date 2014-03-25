@@ -60,6 +60,5 @@ int main()
     Solution S;
     
     cout << "max palindorm:" << S.longestPalindrome(s)<<endl;
-
     return 0;
 }
