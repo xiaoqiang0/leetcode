@@ -25,11 +25,13 @@ class Solution {
                 string t = s.substr(idx, i - idx + 1);
                 int n = atoi(t.c_str());
                 if (n < 0 || n > 255) break;
-                if ((len - i - 1) > 3*left) continue;
-                if ((len - i - 1) < left) break;
+                if ((len - i - 1) > 3*(left-1)) continue;
+                if ((len - i - 1) < (left-1)) break;
+                if (s[idx] == '0' && i != idx) break;
                 cur.push_back(s.substr(idx, i - idx + 1));
                 gen(s, i+1, res, cur);
                 cur.pop_back();
+                if (s[idx] == '0') break;
             }
             
 
@@ -45,7 +47,9 @@ class Solution {
 int main()
 {
     //string s("1234573");
-    string s("25525511135");
+    //string s("25525511135");
+    //string s("0000");
+    string s("010010");
     Solution S;
     vector<string> res = S.restoreIpAddresses(s);
 
