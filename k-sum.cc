@@ -144,6 +144,57 @@ class Solution {
             return min;
 
         }
+
+        vector<vector<int> > fourSum(vector<int> &num, int target) {
+            sort(num.begin(), num.end());
+            vector<vector<int> >res;
+            set<vector<int> >re;
+            map<int, vector<pair<pair<int, int>, pair<int, int> > > > m;
+            if (num.size() < 4) return res;
+            for (int i = 0; i < num.size()-1; i ++){
+                if (i > 0&&num[i] == num[i-1]) continue;
+                for (int j = i+1; j < num.size(); j++){
+                    if (j != i+1 && num[j] == num[j-1]) continue;
+                    m[num[i]+num[j]].push_back(make_pair(make_pair(i, num[i]),
+                                                         make_pair(j, num[j])));
+                }
+            }
+
+
+            for (auto it = m.begin(); it != m.end(); it++){
+                int p1 = it->first;
+                
+                if (target - p1 < p1) break;
+                if (m.find(target-p1) == m.end()) continue;
+                
+                vector<pair<pair<int, int>, pair<int, int> > > v1 = it->second;
+                vector<pair<pair<int, int>, pair<int, int> > > v2 = m[target-p1];
+
+                for (int i = 0; i < v1.size(); i++)
+                    for (int j = 0; j < v2.size(); j++){
+                        vector<int> v;
+                        pair<pair<int, int>, pair<int, int> > l = v1[i];
+                        pair<pair<int, int>, pair<int, int> > r = v2[j];
+
+                        if (l.first.first != r.first.first && \
+                            l.first.first != r.second.first && \
+                            l.second.first != r.first.first && \
+                            l.second.first != r.second.first) {
+                        
+                            v.push_back(l.first.second);
+                            v.push_back(l.second.second);
+                            v.push_back(r.first.second);
+                            v.push_back(r.second.second);
+
+                            sort(v.begin(), v.end());
+
+                            re.insert(v);
+                        }
+                    }
+            }
+            res.assign(re.begin(), re.end());
+            return res;
+        }
 };
 
 int main()
@@ -170,13 +221,27 @@ int main()
       cout <<endl;
 
       }
-     */
     int A[] = {-3,-2,-5,3,-4};
     vector<int> v;
     v.assign(A, A+sizeof(A)/sizeof(int));
 
     Solution S;
     cout << S.threeSumClosest(v, -1) <<endl;
+     */
+      int A[] = {1, 0, -1, 0, -2, 2};
+      vector<int> v;
+      v.assign(A, A+sizeof(A)/sizeof(int));
+
+      Solution S;
+      vector<vector<int> > r = S.fourSum(v, 0);
+
+      for (int i = 0; i < r.size(); i++){
+      for (int j = 0; j < 4; j++)
+          cout << r[i][j] << " ";
+
+      cout <<endl;
+
+      }
 
     return 0;
 }
