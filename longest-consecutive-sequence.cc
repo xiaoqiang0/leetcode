@@ -8,7 +8,7 @@
 using namespace std;
 class Solution {
     public:
-        int longestConsecutive(vector<int> &num) {
+        int longestConsecutive1(vector<int> &num) {
             if (num.size() == 0) return 0;
             int max = num[0];
             int min = num[0];
@@ -48,11 +48,35 @@ class Solution {
             return maxlen;
 
         }
+        int longestConsecutive(vector<int> &num) {
+            if (num.size() == 0)
+                return 0;
+            sort(num.begin(), num.end());
+            
+            int max = 0;
+            int c = 1;
+            for (int i = 1; i < num.size(); i++){
+                if (num[i-1]+1 == num[i])
+                    c++;
+                else if (num[i-1] == num[i])
+                    c = c;
+                else {
+                    if (max < c)
+                        max = c;
+                    c = 1;
+                }
+            }
+
+            if (max < c)
+                max = c;
+
+            return max;
+        }
 };
 int main()
 {
-    //int A[] = {100, 4, 200, 1, 3, 2};
-    int A[] = {0, -1};
+    int A[] = {100, 4, 200, 1, 3, 2};
+    //int A[] = {0, -1};
 
     vector<int> v;
     v.assign(A, A+sizeof(A)/sizeof(int));
