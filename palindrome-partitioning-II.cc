@@ -12,26 +12,55 @@ class Solution {
             vector<string> cur;
             vector<vector<int> > arcs(s.length()+1, vector<int>(s.length()+1, 10000));
             map<int, vector<int> > m;
-            for (int i = 0; i < s.length(); i++)
-                for (int j = s.length() - 1; j >= i; j--) {
-                    int flag = 1;
-                    if (j < s.length() - 1 && arcs[i][j+1] == 1) {
-                        //cout <<"save" <<endl;
-                        continue;
-                    }
+            //-----
+            string str(s);
+            int n = s.length();
 
-                    for (int k = i; k <=(i+j)/2; k++)
-                        if (s[k] != s[j-k+i]){
-                            flag = 0;
-                            break;
-                        }
-
-                    if (flag == 0) continue;
-                    for (int k = i; k <=(i+j)/2; k++) {
-                        m[k].push_back(j-k+i+1);
-                        arcs[k][j-k+i+1] = 1;
-                    }
+            for(int i = 0; i < s.length(); i++){
+                m[i].push_back(i+1);
+                arcs[i][i+1]=1;
+            }
+            for (int i = 0; i <= 2*n; i=i+2)
+                str.insert(i, 1, '#');
+            str.insert(0, 1, '$');
+            //cout <<str<<endl;
+            vector<int> p(str.length(), 0);
+            int mx = 0;
+            int id;
+            //cout <<" ";
+            for(int i=1; i<str.length(); i++) {
+                if( mx > i )
+                    p[i] = min(p[2*id-i], mx-i);
+                else
+                    p[i] = 1;
+                for(; str[i+p[i]] == str[i-p[i]]; p[i]++);
+                //cout << p[i];
+                if( p[i] + i > mx ) {
+                    mx = p[i] + i;
+                    id = i;
                 }
+                int len = p[i]-1;
+                if (len == 0) continue;
+                int idx = i - p[i] + 1;
+                if (idx % 2 == 0)
+                    idx = idx/2 - 1;
+                else
+                    idx = (idx+1)/2 - 1;
+                
+                for (int j = idx; j < len/2+idx; j++){
+                    m[j].push_back(idx+len+idx - j);
+                    arcs[j][idx+len+idx - j] = 1;
+                }
+            }
+
+            /*cout <<endl;
+            for (auto it = m.begin(); it != m.end(); it++){
+                int s = it->first;
+                vector<int> &t = it->second;
+                
+                for (int i = 0; i < t.size(); i++)
+                    cout <<s<<"->"<<t[i]<<endl;
+            }*/
             vector<int> d(s.length()+1, 10000);
             vector<int> f(s.length()+1, 0);
             vector<int> &v = m[0];
