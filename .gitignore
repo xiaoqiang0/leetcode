@@ -91,3 +91,5 @@ simple-path
 minimum-path-sum
 search-in-rotated-sorted-array
 *.txt
+word-search
+first-missing-positive
