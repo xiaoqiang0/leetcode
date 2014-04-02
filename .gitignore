@@ -95,3 +95,5 @@ word-search
 first-missing-positive
 regular-expression-matching
 wildcard-matching
+multiply-strings
+string-to-integer-atoi
