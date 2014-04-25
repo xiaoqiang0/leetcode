@@ -43,21 +43,15 @@ class Solution {
                                 Q.push(next);
                                 m[next].push_back(w);
                                 v[next] = 1;
-                                if (next.compare(end) == 0){
-                                    found = true;
-                                    goto out;
-                                }
+                                if (next.compare(end) == 0)
+                                    return level;
                             }
 
                         }
                     }
                 }
             }
-out:
-            if (found == false)
-                return 0;
-            else
-                return level ;
+            return 0;
         }       
 };
 
